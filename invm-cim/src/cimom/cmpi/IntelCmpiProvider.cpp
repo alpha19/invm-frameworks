@@ -926,13 +926,17 @@ CMPIStatus Generic_InvokeMethod(CMPIMethodMI *mi, const CMPIContext *ctx, const 
 						{
 							wbem::framework::Attribute *pAttribute = cmpiToIntel(&arg, false, &tempStatus);
 							KEEP_ERR(status, tempStatus);
-							if (tempStatus.rc == CMPI_RC_OK)
+							if(pAttribute)
 							{
-								const char *name = CMGetCharsPtr(pName, &tempStatus);
-								KEEP_ERR(status, tempStatus);
-								inAttributes[name] = *pAttribute;
+								if (tempStatus.rc == CMPI_RC_OK)
+								{
+									const char *name = CMGetCharsPtr(pName, &tempStatus);
+									KEEP_ERR(status, tempStatus);
+									inAttributes[name] = *pAttribute;
+								}
+								delete pAttribute;
+								pAttribute = NULL;
 							}
-							delete pAttribute;
 						}
 					}
 

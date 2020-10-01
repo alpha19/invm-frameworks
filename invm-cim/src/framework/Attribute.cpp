@@ -46,7 +46,9 @@ wbem::framework::Attribute::~Attribute()
 {
 }
 
-wbem::framework::Attribute::Attribute(const wbem::framework::Attribute &attribute)
+wbem::framework::Attribute::Attribute(const wbem::framework::Attribute &attribute) \
+: m_BooleanList(BOOLEAN_LIST()), m_StrList(STR_LIST()), m_UInt32List(UINT32_LIST()), m_UInt64List(UINT64_LIST()), \ 
+m_UInt16List(UINT16_LIST()), m_UInt8List(UINT8_LIST()), m_Str("")
 {
 	m_IsKey = attribute.m_IsKey;
 	m_Type = attribute.m_Type;
@@ -225,8 +227,9 @@ wbem::framework::Attribute::Attribute(REAL32 value, bool isKey)
 	m_IsAssociationClassInstance = false;
 }
 
-wbem::framework::Attribute::Attribute(const char *value, enum DatetimeSubtype type, bool isKey)
-	throw (Exception)
+wbem::framework::Attribute::Attribute(const char *value, enum DatetimeSubtype type, bool isKey) throw (Exception) \
+: m_BooleanList(BOOLEAN_LIST()), m_StrList(STR_LIST()), m_UInt32List(UINT32_LIST()), m_UInt64List(UINT64_LIST()), \
+m_UInt16List(UINT16_LIST()), m_UInt8List(UINT8_LIST()), m_Str("")
 {
 	enum datetime_type strType = convert_datetime_string_to_seconds(value, &(m_Value.uint64));
 	m_IsKey = isKey;
@@ -246,8 +249,9 @@ wbem::framework::Attribute::Attribute(const char *value, enum DatetimeSubtype ty
 	m_IsAssociationClassInstance = false;
 }
 
-wbem::framework::Attribute::Attribute(const STR &value, enum DatetimeSubtype type, bool isKey)
-	throw (Exception)
+wbem::framework::Attribute::Attribute(const STR &value, enum DatetimeSubtype type, bool isKey) throw (Exception) \
+: m_BooleanList(BOOLEAN_LIST()), m_StrList(STR_LIST()), m_UInt32List(UINT32_LIST()), m_UInt64List(UINT64_LIST()), \
+m_UInt16List(UINT16_LIST()), m_UInt8List(UINT8_LIST()), m_Str("")
 {
 	enum datetime_type strType = convert_datetime_string_to_seconds(value.c_str(), &(m_Value.uint64));
 	m_IsKey = isKey;
@@ -376,13 +380,13 @@ std::string wbem::framework::Attribute::stringValue() const
 	{
 		COMMON_DATETIME_STR datetime;
 		convert_seconds_to_datetime(m_Value.uint64, datetime);
-		return datetime;
+		return std::string(datetime);
 	}
 	if (m_Type == DATETIME_INTERVAL_T)
 	{
 		COMMON_DATETIME_STR interval;
 		convert_seconds_to_datetime_interval(m_Value.uint64, interval);
-		return interval;
+		return std::string(interval);
 	}
 	COMMON_LOG_WARN_F("Attempted to get stringValue of an attribute of type: %d", m_Type);
 	return std::string();

@@ -52,7 +52,7 @@ bool wbem::framework::StringUtil::stringCompareIgnoreCase(std::string str1, std:
 
 COMMON_UINT64 wbem::framework::StringUtil::stringToUint64(const std::string& str)
 {
-	COMMON_UINT64 result;
+	COMMON_UINT64 result = 0;
 
 	std::stringstream ss(str);
 	ss >> result;
@@ -62,7 +62,7 @@ COMMON_UINT64 wbem::framework::StringUtil::stringToUint64(const std::string& str
 
 COMMON_INT64 wbem::framework::StringUtil::stringToInt64(const std::string& str)
 {
-	COMMON_INT64 result;
+	COMMON_INT64 result = 0;
 
 	std::stringstream ss(str);
 	ss >> result;

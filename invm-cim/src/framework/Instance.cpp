@@ -53,6 +53,7 @@ wbem::framework::Instance::Instance(ObjectPath& path)
 {}
 
 wbem::framework::Instance::Instance(std::string cimXml)
+	: m_Class(""), m_Host(""), m_Namespace(""), m_InstanceAttributes()
 {
 	try
 	{

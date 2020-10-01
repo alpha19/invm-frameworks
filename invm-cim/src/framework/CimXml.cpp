@@ -82,7 +82,7 @@ wbem::framework::CimXml::CimXml(std::string cimXml)
 	{
         if (xml)
         {
-            delete xml;
+            delete []xml;
             xml = NULL;
         }
 		throw ExceptionBadParameter("cimXml");
@@ -90,7 +90,8 @@ wbem::framework::CimXml::CimXml(std::string cimXml)
 
     if (xml)
     {
-        delete xml;
+        delete []xml;
+        xml = NULL;
     }
 }
 

@@ -541,9 +541,7 @@ CMPIStatus Generic_Associators(CMPIAssociationMI *mi, const CMPIContext *ctx,
 			wbem::framework::instances_t *pInstances = NULL;
 			try
 			{
-				std::string assocClassStr = assocClass != NULL
-						? assocClass
-						: objectPath.getClass();
+				std::string assocClassStr = assocClass != NULL ? assocClass : "";
 				std::string resultClassStr = resultClass != NULL ? resultClass : "";
 				std::string roleStr = role != NULL ? role : "";
 				std::string resultRoleStr = resultRole != NULL ? resultRole : "";
@@ -626,9 +624,7 @@ CMPIStatus Generic_AssociatorNames(CMPIAssociationMI *mi, const CMPIContext *ctx
 					pProviderFactory->getInstanceFactory(objectPath.getClass());
 			if (pFactory != NULL)
 			{
-				std::string assocClassStr = assocClass != NULL
-						? assocClass
-						: objectPath.getClass();
+				std::string assocClassStr = assocClass != NULL ? assocClass : "";
 				std::string resultClassStr = resultClass != NULL ? resultClass : "";
 				std::string roleStr = role != NULL ? role : "";
 				std::string resultRoleStr = resultRole != NULL ? resultRole : "";
@@ -692,8 +688,7 @@ CMPIStatus Generic_References(CMPIAssociationMI *mi, const CMPIContext *ctx,
 			wbem::framework::instances_t *pInstances = NULL;
 			try
 			{
-				std::string resultClassStr = resultClass != NULL ? resultClass
-																 : objectPath.getClass();
+				std::string resultClassStr = resultClass != NULL ? resultClass  : "";
 				std::string roleStr = role != NULL ? role : "";
 
 				// references are the association class so assocClass = resultClass
@@ -706,12 +701,14 @@ CMPIStatus Generic_References(CMPIAssociationMI *mi, const CMPIContext *ctx,
 						wbem::framework::instances_t::iterator iInstance = pInstances->begin();
 						for (; iInstance != pInstances->end(); iInstance++)
 						{
+							//CMPIInstance *pCmpiInstance = intelToCmpi(g_pBroker, &(*iInstance), &status);
+							
 							COMMON_LOG_DEBUG_F("Converting instance %s to CMPI",
 									iInstance->getObjectPath().asString().c_str());
 
 							CMPIObjectPath *cmpiObjectPath = CMNewObjectPath (g_pBroker,
 									CMGetCharsPtr(CMGetNameSpace(op, &status), NULL),
-									resultClassStr.c_str(), &status);
+									iInstance->getObjectPath().getClass().c_str(), &status);
 
 							wbem::framework::attributes_t keys = iInstance->getObjectPath().getKeys();
 							wbem::framework::attributes_t::iterator key = keys.begin();
@@ -742,6 +739,7 @@ CMPIStatus Generic_References(CMPIAssociationMI *mi, const CMPIContext *ctx,
 								CMSetProperty(pCmpiInstance, iCmpiKey->first.c_str(),
 										&(iCmpiKey->second.value), iCmpiKey->second.type);
 							}
+							
 
 							CMReturnInstance(rslt, pCmpiInstance);
 						}
@@ -805,8 +803,7 @@ CMPIStatus Generic_ReferenceNames(CMPIAssociationMI *mi, const CMPIContext *ctx,
 		{
 			try
 			{
-				std::string resultClassStr = resultClass != NULL ? resultClass
-						: objectPath.getClass();
+				std::string resultClassStr = resultClass != NULL ? resultClass : "";
 				std::string roleStr = role != NULL ? role : "";
 
 				// references are the association class so assocClass = resultClass
@@ -816,6 +813,8 @@ CMPIStatus Generic_ReferenceNames(CMPIAssociationMI *mi, const CMPIContext *ctx,
 				wbem::framework::instance_names_t::iterator name = pNames->begin();
 				for (; name != pNames->end(); name++)
 				{
+					CMPIObjectPath *cmpiObjectPath = intelToCmpi(g_pBroker, &(*name), &status);
+					/*
 					CMPIObjectPath *cmpiObjectPath =
 							CMNewObjectPath (g_pBroker,
 									CMGetCharsPtr(CMGetNameSpace(op, &status), NULL), resultClassStr.c_str(), &status);
@@ -835,6 +834,7 @@ CMPIStatus Generic_ReferenceNames(CMPIAssociationMI *mi, const CMPIContext *ctx,
 						cmpiAttribute.value.ref = refPath;
 						CMAddKey(cmpiObjectPath, key->first.c_str(), &(cmpiAttribute.value), cmpiAttribute.type);
 					}
+					*/
 
 					CMReturnObjectPath(rslt, cmpiObjectPath);
 				}

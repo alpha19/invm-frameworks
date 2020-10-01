@@ -341,7 +341,18 @@ wbem::framework::instance_names_t *wbem::framework::InstanceFactory::referenceNa
 		InstanceFactory * pAssociationFactory = associationFactories.back();
 		if (pAssociationFactory)
 		{
-			pInstanceNames = pAssociationFactory->getInstanceNames();
+			if(!pInstanceNames)
+			{
+				pInstanceNames = pAssociationFactory->getInstanceNames();
+			}
+			else
+			{
+				auto tempInstanceNames = pAssociationFactory->getInstanceNames();
+				if(tempInstanceNames)
+				{
+					pInstanceNames->insert(pInstanceNames->end(), tempInstanceNames->begin(), tempInstanceNames->end());
+				}
+			}
 
 			delete pAssociationFactory;
 		}
@@ -381,7 +392,18 @@ wbem::framework::instances_t *wbem::framework::InstanceFactory::referenceInstanc
 		if (pAssociationFactory)
 		{
 			attribute_names_t attributesTwo;
-			pInstances = pAssociationFactory->getInstances(attributesTwo);
+			if(!pInstances)
+			{
+				pInstances = pAssociationFactory->getInstances(attributesTwo);
+			}
+			else
+			{
+				auto tempInstances = pAssociationFactory->getInstances(attributesTwo);
+				if(tempInstances)
+				{
+					pInstances->insert(pInstances->end(), tempInstances->begin(), tempInstances->end());
+				}
+			}
 
 			delete pAssociationFactory;
 		}
